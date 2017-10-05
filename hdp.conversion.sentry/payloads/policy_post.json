@@ -1,0 +1,100 @@
+{
+  "resources": {
+    "table": {
+      "isRecursive": false,
+      "values": [
+        "*"
+      ],
+      "isExcludes": true
+    },
+    "column": {
+      "isRecursive": false,
+      "values": [
+        "*"
+      ],
+      "isExcludes": true
+    },
+    "udf": [],
+    "url": [],
+    "database": {
+      "isRecursive": false,
+      "values": [
+        "achcb"
+      ],
+      "isExcludes": true
+    }
+  },
+  "service": "STR01_hive",
+  "isAuditEnabled": true,
+  "allowExceptions": [
+
+  ],
+  "name": "abc",
+  "denyPolicyItems": [
+
+  ],
+  "denyExceptions": [
+
+  ],
+  "isEnabled": true,
+  "dataMaskPolicyItems": [
+
+  ],
+  "version": 1,
+  "policyItems": [
+    {
+      "delegateAdmin": false,
+      "groups": [
+
+      ],
+      "accesses": [
+        {
+          "type": "select",
+          "isAllowed": true
+        },
+        {
+          "type": "update",
+          "isAllowed": true
+        },
+        {
+          "type": "create",
+          "isAllowed": true
+        },
+        {
+          "type": "drop",
+          "isAllowed": true
+        },
+        {
+          "type": "alter",
+          "isAllowed": true
+        },
+        {
+          "type": "index",
+          "isAllowed": true
+        },
+        {
+          "type": "lock",
+          "isAllowed": true
+        },
+        {
+          "type": "all",
+          "isAllowed": true
+        },
+        {
+          "type": "write",
+          "isAllowed": true
+        }
+      ],
+      "users": [
+        "hdfs""
+      ],
+      "conditions": [
+
+      ]
+    }
+  ],
+  "rowFilterPolicyItems": [
+
+  ],
+  "description": "Sentry.import - isgaaadm.achcb.*.*"
+}

@@ -1,0 +1,79 @@
+{
+  "isEnabled": true,
+  "resources": {
+    "table": {
+      "isRecursive": false,
+      "values": [
+        "*"
+      ],
+      "isExcludes": false
+    },
+    "column": {
+      "isRecursive": false,
+      "values": [
+        "*"
+      ],
+      "isExcludes": false
+    },
+    "database": {
+      "isRecursive": false,
+      "values": [
+        "achcb"
+      ],
+      "isExcludes": false
+    }
+  },
+  "version": 1,
+  "service": "STR01_hive",
+  "policyItems": [
+    {
+      "delegateAdmin": false,
+      "groups": [
+        "isgaaadm"
+      ],
+      "accesses": [
+        {
+          "type": "select",
+          "isAllowed": true
+        },
+        {
+          "type": "update",
+          "isAllowed": true
+        },
+        {
+          "type": "create",
+          "isAllowed": true
+        },
+        {
+          "type": "drop",
+          "isAllowed": true
+        },
+        {
+          "type": "alter",
+          "isAllowed": true
+        },
+        {
+          "type": "index",
+          "isAllowed": true
+        },
+        {
+          "type": "lock",
+          "isAllowed": true
+        },
+        {
+          "type": "all",
+          "isAllowed": true
+        },
+        {
+          "type": "write",
+          "isAllowed": true
+        }
+      ],
+      "users": [],
+      "conditions": []
+    }
+  ],
+  "isAuditEnabled": true,
+  "description": "Sentry.import - isgaaadm.achcb.*.*",
+  "name": "Sentry.import - isgaaadm.achcb.*.*"
+}

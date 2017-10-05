@@ -1,3 +1,9 @@
+# Idea
+.idea
+out
+build
+
+
 .gradle
 /build/
 

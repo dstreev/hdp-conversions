@@ -1,0 +1,45 @@
+group 'com.streever.hdp.conversion'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    maven {
+        name "Hortonworks"
+        url "http://repo.hortonworks.com/content/repositories/releases"
+    }
+}
+
+dependencies {
+    def withoutJetty = {
+        exclude group: 'org.mortbay.jetty', module: 'jetty'
+        exclude group: 'org.mortbay.jetty', module: 'jetty-util'
+        exclude group: 'org.mortbay.jetty', module: 'jetty-sslengine'
+    }
+    compile 'org.codehaus.groovy:groovy-all:2.5.0-beta-1'
+    compile group:'commons-cli', name: 'commons-cli', version: '1.4'
+//    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile 'org.apache.hive:hive-jdbc:1.2.1000.2.6.2.0-205:standalone', withoutJetty
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'ranger.rest.v2.LoadSentryPolicies'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'

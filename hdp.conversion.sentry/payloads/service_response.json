@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "guid": "a2978cfc-964c-4429-9074-c49ef143efb0",
+    "isEnabled": true,
+    "createdBy": "amb_ranger_admin",
+    "createTime": 1502039792000,
+    "updateTime": 1502200483000,
+    "version": 2,
+    "type": "hdfs",
+    "name": "STR01_hadoop",
+    "description": "hdfs repo",
+    "configs": {
+      "tag.download.auth.users": "hdfs",
+      "password": "*****",
+      "policy.download.auth.users": "hdfs",
+      "hadoop.rpc.protection": "authentication",
+      "hadoop.security.authentication": "simple",
+      "fs.default.name": "hdfs://STR01",
+      "hadoop.security.authorization": "false",
+      "hadoop.security.auth_to_local": "DEFAULT",
+      "ambari.service.check.user": "ambari-qa",
+      "username": "hdfs"
+    },
+    "policyVersion": 10,
+    "policyUpdateTime": 1505156587000,
+    "tagVersion": 1,
+    "tagUpdateTime": 1502039792000
+  },
+  {
+    "id": 2,
+    "guid": "469db041-2ce4-4c9f-98a3-e3c2e712b49f",
+    "isEnabled": true,
+    "createdBy": "amb_ranger_admin",
+    "createTime": 1502040340000,
+    "updateTime": 1502200483000,
+    "version": 2,
+    "type": "hive",
+    "name": "STR01_hive",
+    "description": "hive repo",
+    "configs": {
+      "tag.download.auth.users": "hive",
+      "password": "*****",
+      "policy.download.auth.users": "hive",
+      "policy.grantrevoke.auth.users": "hive",
+      "jdbc.driverClassName": "org.apache.hive.jdbc.HiveDriver",
+      "ambari.service.check.user": "ambari-qa",
+      "jdbc.url": "jdbc:hive2://os02.streever.local:2181,os03.streever.local:2181,os01.streever.local:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2",
+      "username": "hive"
+    },
+    "policyVersion": 12,
+    "policyUpdateTime": 1504812330000,
+    "tagVersion": 1,
+    "tagUpdateTime": 1502040340000
+  }
+]
