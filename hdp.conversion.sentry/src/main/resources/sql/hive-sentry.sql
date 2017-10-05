@@ -15,9 +15,9 @@ SELECT
   a.action,
   a.with_grant
 FROM
-  allstate_sentry_roles r
+  sentry_roles r
   INNER JOIN
-  allstate_sentry_access a
+  sentry_access a
     ON
       r.id = a.id
       AND r.name = a.name
