@@ -11,7 +11,7 @@ Use [this](./src/main/resources/sql/sentry_extracts.sql) sql to extract the Sent
 
 Run the [ddl](./src/main/resources/sql/hive-sentry.ddl) in Hive to build the external tables.  Note: Create a new databases and specify it in the hive script for the environment variable "TARGET_DB".
 
-IE: hive -hiveconf TARGET_DB=SENTRY_IMPORT -f sentry.ddl
+IE: ```hive -hiveconf TARGET_DB=SENTRY_IMPORT -hiveconf BASE_DIR=/user/fred/datasets/sentry_off_load -f hive-sentry.ddl```
 
 Test that the database is populated.
 
