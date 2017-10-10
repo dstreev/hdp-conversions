@@ -5,11 +5,11 @@ This project is designed to process an extract from the Cloudera Sentry Database
 
 Using Sql, extract the Roles and Access tables from Sentry into two text files.  The files need to be comma delimited.
 
-Use [this](./src/main/resources/sentry_extracts.sql) sql to extract the Sentry elements.  We'll use these extract to drive Hive External Tables in HDP.
+Use [this](./src/main/resources/sql/sentry_extracts.sql) sql to extract the Sentry elements.  We'll use these extract to drive Hive External Tables in HDP.
 
 ## Build External Tables
 
-Run the [ddl](./src/main/resources/hive_sentry.ddl) in Hive to build the external tables.  Note: Create a new databases and specify it in the hive script for the environment variable "TARGET_DB".
+Run the [ddl](./src/main/resources/sql/hive-sentry.ddl) in Hive to build the external tables.  Note: Create a new databases and specify it in the hive script for the environment variable "TARGET_DB".
 
 IE: hive -hiveconf TARGET_DB=SENTRY_IMPORT -f sentry.ddl
 
