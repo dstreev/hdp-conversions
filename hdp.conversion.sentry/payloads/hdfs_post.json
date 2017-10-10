@@ -1,0 +1,39 @@
+{
+  "resources": {
+    "path": {
+      "isRecursive": true,
+      "values": [
+        "/TS"
+      ],
+      "isExcludes": false
+    }
+  },
+  "service": "STR01_hadoop",
+  "isAuditEnabled": true,
+  "name": "Sentry.import - ./TS",
+  "isEnabled": true,
+  "version": 1,
+  "policyItems": [
+    {
+      "delegateAdmin": false,
+      "groups": ["awetlprd","hsmleed","hsbi4sbx","hdtmsgrp","hdpato","isgradm"],
+      "accesses": [
+        {
+          "type": "read",
+          "isAllowed": true
+        },
+        {
+          "type": "write",
+          "isAllowed": true
+        },
+        {
+          "type": "execute",
+          "isAllowed": true
+        }
+      ],
+      "users": [],
+      "conditions": []
+    }
+  ],
+  "description": "Sentry.import - ./TS"
+}

@@ -1,6 +1,8 @@
 package util
 
 import groovy.util.logging.Log4j
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 import org.apache.log4j.Logger
 import org.apache.log4j.PropertyConfigurator
 
@@ -9,6 +11,10 @@ class RESTUtil {
     String baseUrl
     String username
     String password
+
+    CloseableHttpClient getHttpClientConnection(String url) {
+        return HttpClients.createDefault()
+    }
 
     HttpURLConnection getConnection(String url) {
         String userPassword = username + ":" + password
@@ -44,6 +50,7 @@ class RESTUtil {
 
         connection.setRequestMethod("POST")
         connection.setDoOutput(true)
+        connection.setDoInput(true)
         connection.setRequestProperty("Content-Type", "application/json; charset=utf8")
         connection.setRequestProperty("X-XSRF-HEADER", "valid")
         connection.setRequestProperty("User-Agent","groovy-rest")
@@ -63,6 +70,9 @@ class RESTUtil {
         if (responseCode == 200) {
             responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
             results = true
+        } else if (responseCode == 404) {
+            log.error "URL Not Found: " + baseUrl + restPath
+            System.exit(-1)
         } else {
             responseReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()))
         }

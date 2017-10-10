@@ -22,7 +22,9 @@ dependencies {
     }
     compile 'org.codehaus.groovy:groovy-all:2.5.0-beta-1'
     compile group:'commons-cli', name: 'commons-cli', version: '1.4'
-//    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
+
     compile 'org.apache.hive:hive-jdbc:1.2.1000.2.6.2.0-205:standalone', withoutJetty
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
