@@ -94,4 +94,50 @@ class RESTUtil {
         return results
 
     }
+
+    Boolean delete(String restPath) {
+
+        def results = false
+        def connection = getConnection(baseUrl + restPath)
+
+        connection.setRequestMethod("DELETE")
+        connection.setDoOutput(true)
+        connection.setDoInput(true)
+        connection.setRequestProperty("Content-Type", "application/json; charset=utf8")
+        connection.setRequestProperty("X-XSRF-HEADER", "valid")
+        connection.setRequestProperty("User-Agent","groovy-rest")
+
+        // Get Response Code
+        int responseCode = connection.getResponseCode()
+
+        // Get Response
+        def BufferedReader responseReader
+        if (responseCode == 200 || responseCode == 204) {
+            responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
+            results = true
+        } else if (responseCode == 404) {
+            log.error "URL Not Found: " + baseUrl + restPath
+            System.exit(-1)
+        } else {
+            responseReader = new BufferedReader(new InputStreamReader(connection.getErrorStream()))
+        }
+
+        StringBuilder sb = new StringBuilder()
+        def inputLine
+        while ((inputLine = responseReader.readLine() != null)) {
+            sb.append(inputLine)
+        }
+        responseReader.close()
+
+        connection.disconnect()
+        if (!results) {
+            log.warn("Delete Error: " + responseCode + " - " + sb.toString())
+        } else {
+            log.debug("Delete Results: " + responseCode + " - " + sb.toString())
+        }
+
+        return results
+
+    }
+
 }

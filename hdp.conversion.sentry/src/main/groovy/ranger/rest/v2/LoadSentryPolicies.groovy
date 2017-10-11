@@ -23,6 +23,9 @@ class LoadSentryPolicies {
     int hivecount = 0
     def String hdfsNameService
     def rangerBaseUrl
+    def deletePolicy = false
+    def delMin = -1
+    def delMax = -1
 
     static void main(String... args) {
         def loadSentryPolicies = new LoadSentryPolicies()
@@ -32,7 +35,7 @@ class LoadSentryPolicies {
     def init(String[] args) {
         def cli = new CliBuilder(usage: 'LoadSentryPolicies')
         cli.url(args: 1, argName: 'URL', required: true, 'Ranger Base URL')
-        cli.jurl(args: 1, argName: 'jdbc_url', required: true, 'Hive URL for Sentry ranger.rest.v2.Policy Extracts')
+        cli.jurl(args: 1, argName: 'jdbc_url', required: false, 'Hive URL for Sentry ranger.rest.v2.Policy Extracts')
         cli.ju(args: 1, argName: 'jdbc_username', required: false, 'Hive User')
         cli.jp(args: 1, argName: 'jdbc_password', required: false, 'Hive User')
         cli.u(longOpt: 'user', args: 1, argName: 'user', required: true, 'User account')
@@ -43,11 +46,21 @@ class LoadSentryPolicies {
         //cli.debug(longOpt: 'debug', args: 0, required: false, 'Debug run to a file.')
         cli.hs(longOpt: 'hive.service', args: 1, required: false, argName: "Hive_Service", "Hive Repo ranger.rest.v2.Service name to apply changes")
         cli.dfss(longOpt: 'hdfs.service', args: 1, required: false, argName: "HDFS_Service", "HDFS Repo ranger.rest.v2.Service name to apply changes")
-
+        cli.delete(longOpt: 'delete.policy', args: 2, valueSeparator: " ", required: false, argName: "Delete_Policy_Range", "Delete Policy Range")
         options = cli.parse(args)
 
         if (!options)
             System.exit(-1)
+
+        if (options.delete) {
+            deletePolicy = true
+            delMin = options.deletes[0].toInteger()
+            delMax = options.deletes[1].toInteger()
+            log.warn("Delete Process Called.  Range: " + delMin + ":" + delMax)
+        } else if (!options.jurl) {
+            log.error ("Missing -jurl")
+            System.exit(-1)
+        }
 
         db_username = options.ju ?: 'anonymous'
         db_password = options.jp ?: '*'
@@ -335,8 +348,26 @@ class LoadSentryPolicies {
 
     }
 
+    def removePolicyRange() {
+        // Get the Policies for Hive
+
+        def range =  delMin..delMax
+        range.each { i ->
+            def policyDeletePath = '/service/public/v2/api/policy/' + i
+
+            log.info ("Deleting Policy with id: " + i)
+            def response = RESTEndpoint.delete(policyDeletePath)
+            log.trace "Delete Response: " + response
+        }
+    }
+
     def execute(String[] args) {
         init(args)
+
+        if (deletePolicy) {
+            removePolicyRange()
+            return
+        }
 
         getServices()
 
