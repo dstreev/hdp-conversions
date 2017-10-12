@@ -3,8 +3,6 @@ package util
 import groovy.util.logging.Log4j
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClients
-import org.apache.log4j.Logger
-import org.apache.log4j.PropertyConfigurator
 
 @Log4j
 class RESTUtil {

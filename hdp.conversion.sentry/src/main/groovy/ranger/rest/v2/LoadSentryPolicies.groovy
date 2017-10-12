@@ -3,13 +3,13 @@ package ranger.rest.v2
 import groovy.json.JsonGenerator
 import groovy.json.JsonSlurper
 import groovy.sql.Sql
+import groovy.text.SimpleTemplateEngine
 import groovy.util.logging.Log4j
 import util.RESTUtil
-import groovy.text.SimpleTemplateEngine
 
 @Log4j
 class LoadSentryPolicies {
-//    def cli
+
     def options
     def db_username
     def db_password
@@ -26,6 +26,7 @@ class LoadSentryPolicies {
     def deletePolicy = false
     def delMin = -1
     def delMax = -1
+    def dryrun = false
 
     static void main(String... args) {
         def loadSentryPolicies = new LoadSentryPolicies()
@@ -35,11 +36,12 @@ class LoadSentryPolicies {
     def init(String[] args) {
         def cli = new CliBuilder(usage: 'LoadSentryPolicies')
         cli.url(args: 1, argName: 'URL', required: true, 'Ranger Base URL')
-        cli.jurl(args: 1, argName: 'jdbc_url', required: false, 'Hive URL for Sentry ranger.rest.v2.Policy Extracts')
+        cli.jurl(args: 1, argName: 'jdbc_url', required: false, 'HS2 JDBC URL for Sentry ranger.rest.v2.Policy Extracts')
         cli.ju(args: 1, argName: 'jdbc_username', required: false, 'Hive User')
-        cli.jp(args: 1, argName: 'jdbc_password', required: false, 'Hive User')
+        cli.jp(args: 1, argName: 'jdbc_password', required: false, 'Hive Password')
         cli.u(longOpt: 'user', args: 1, argName: 'user', required: true, 'User account')
         cli.p(longOpt: 'password', args: 1, argName: 'password', required: true, 'User password')
+        cli.dr(longOpt: 'dryrun', args: 0, required: false, 'Dry Run')
         cli.h(longOpt: 'hive', args: 0, required: false, 'Process hive policies.')
         cli.dfs(longOpt: 'hdfs', args: 0, required: false, 'Process hdfs policies.')
         cli.dfsns(longOpt: 'hdfs_nameservice', args: 1, required: false, 'HDFS Nameservice IE: hdfs://<nameservice>/user/hdfs.')
@@ -58,8 +60,15 @@ class LoadSentryPolicies {
             delMax = options.deletes[1].toInteger()
             log.warn("Delete Process Called.  Range: " + delMin + ":" + delMax)
         } else if (!options.jurl) {
-            log.error ("Missing -jurl")
+            log.error("Missing -jurl")
             System.exit(-1)
+        }
+
+        if (options.dr) {
+            dryrun = true
+            log.info("==================")
+            log.info(" ** DRY RUN **    ")
+            log.info("==================")
         }
 
         db_username = options.ju ?: 'anonymous'
@@ -74,10 +83,6 @@ class LoadSentryPolicies {
             println "Please specify at least one policy type to import."
             return -1
         }
-
-        // Setup Sign in
-        String userPassword = options.u + ":" + options.p;
-        String encoding = new sun.misc.BASE64Encoder().encode(userPassword.getBytes());
 
         rangerBaseUrl = options.url
 
@@ -235,13 +240,17 @@ class LoadSentryPolicies {
                 log.info("Posting: " + postContent)
                 log.info("==========================")
                 log.info("Posting Policy: " + hdfsCreatePolicy.name)
-                def success = RESTEndpoint.post(policyRESTPath, postContent)
+                if (!dryrun) {
+                    def success = RESTEndpoint.post(policyRESTPath, postContent)
 
-                if (success) {
-                    new_++
+                    if (success) {
+                        new_++
+                    } else {
+                        newErr++
+                        log.warn("Issue posting policy: " + hdfsCreatePolicy.name)
+                    }
                 } else {
-                    newErr++
-                    log.warn("Issue posting policy: " + hdfsCreatePolicy.name)
+                    log.info("Dry Run.  Nothing written.")
                 }
 
                 log.info("==========================")
@@ -262,7 +271,7 @@ class LoadSentryPolicies {
     }
 
     def processHive() {
-        log.info ("Processing Hive")
+        log.info("Processing Hive")
 
         int curr = 0
         int new_ = 0
@@ -317,23 +326,26 @@ class LoadSentryPolicies {
             if (!found) {
                 // Post ranger.rest.v2.Policy
                 def postContent = generator.toJson(hiveCreatePolicy)
-                log.debug("==========================")
-                log.debug("Posting: " + postContent)
-                log.debug("==========================")
+                log.info("==========================")
+                log.info("Posting: " + postContent)
+                log.info("==========================")
                 log.info("Posting Policy: " + hiveCreatePolicy.name)
-                def success = RESTEndpoint.post(policyRESTPath, postContent)
+                if (!dryrun) {
+                    def success = RESTEndpoint.post(policyRESTPath, postContent)
 
-                if (success) {
-                    new_++
+                    if (success) {
+                        new_++
+                    } else {
+                        newErr++
+                        log.warn("Issue posting policy: " + hiveCreatePolicy.name)
+                    }
                 } else {
-                    newErr++
-                    log.warn("Issue posting policy: " + hiveCreatePolicy.name)
+                    log.info ("Dry Run. Nothing written")
                 }
 
-
-                log.debug("==========================")
-                log.debug("Policy: " + hiveCreatePolicy.name)
-                log.debug("Post Response: " + response)
+                log.info("==========================")
+                log.info("Policy: " + hiveCreatePolicy.name)
+                log.info("Post Response: " + response)
             } else {
                 log.debug("Found a resource match for policy: " + hiveCreatePolicy.name)
                 matched++
@@ -351,13 +363,17 @@ class LoadSentryPolicies {
     def removePolicyRange() {
         // Get the Policies for Hive
 
-        def range =  delMin..delMax
+        def range = delMin..delMax
         range.each { i ->
             def policyDeletePath = '/service/public/v2/api/policy/' + i
 
-            log.info ("Deleting Policy with id: " + i)
-            def response = RESTEndpoint.delete(policyDeletePath)
-            log.trace "Delete Response: " + response
+            log.info("Deleting Policy with id: " + i)
+            if (!dryrun) {
+                def response = RESTEndpoint.delete(policyDeletePath)
+                log.trace "Delete Response: " + response
+            } else {
+                log.info("Dry Run. Nothing Deleted.")
+            }
         }
     }
 

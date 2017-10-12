@@ -1,30 +1,4 @@
 package ranger.rest.v2
-/*
-    "resources": {
-      "database": {
-        "values": [
-          "*"
-        ],
-        "isExcludes": false,
-        "isRecursive": false
-      },
-      "column": {
-        "values": [
-          "*"
-        ],
-        "isExcludes": false,
-        "isRecursive": false
-      },
-      "table": {
-        "values": [
-          "*"
-        ],
-        "isExcludes": false,
-        "isRecursive": false
-      }
-    },
-
-*/
 
 class HiveResource {
     PolicyResource url
