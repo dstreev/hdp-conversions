@@ -22,21 +22,27 @@ This program will import the policies for HDFS and Hive.
 You will need the following information to run:
 ```
 usage: LoadSentryPolicies
- -dfs,--hdfs                           Process hdfs policies.
- -dfsns,--hdfs_nameservice <arg>       HDFS Nameservice IE:
-                                       hdfs://<nameservice>/user/hdfs.
- -dfss,--hdfs.service <HDFS_Service>   HDFS Repo ranger.rest.v2.Service
-                                       name to apply changes
- -h,--hive                             Process hive policies.
- -hs,--hive.service <Hive_Service>     Hive Repo ranger.rest.v2.Service
-                                       name to apply changes
- -jp <jdbc_password>                   Hive User
- -ju <jdbc_username>                   Hive User
- -jurl <jdbc_url>                      Hive URL for Sentry
-                                       ranger.rest.v2.Policy Extracts
- -p,--password <password>              User password
- -u,--user <user>                      User account
- -url <URL>                            Ranger Base URL
+ -delete,--delete.policy <Delete_Policy_Range>   Delete Policy Range
+ -dfs,--hdfs                                     Process hdfs policies.
+ -dfsns,--hdfs_nameservice <arg>                 HDFS Nameservice IE:
+                                                 hdfs://<nameservice>/user
+                                                 /hdfs.
+ -dfss,--hdfs.service <HDFS_Service>             HDFS Repo
+                                                 ranger.rest.v2.Service
+                                                 name to apply changes
+ -dr,--dryrun                                    Dry Run
+ -h,--hive                                       Process hive policies.
+ -hs,--hive.service <Hive_Service>               Hive Repo
+                                                 ranger.rest.v2.Service
+                                                 name to apply changes
+ -jp <jdbc_password>                             Hive Password
+ -ju <jdbc_username>                             Hive User
+ -jurl <jdbc_url>                                HS2 JDBC URL for Sentry
+                                                 ranger.rest.v2.Policy
+                                                 Extracts
+ -p,--password <password>                        User password
+ -u,--user <user>                                User account
+ -url <URL>                                      Ranger Base URL
 ```
 
 ### Running

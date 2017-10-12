@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import groovy.sql.Sql
 import groovy.text.SimpleTemplateEngine
 import groovy.util.logging.Log4j
+import groovyjarjarcommonscli.HelpFormatter
 import util.RESTUtil
 
 @Log4j
@@ -49,6 +50,7 @@ class LoadSentryPolicies {
         cli.hs(longOpt: 'hive.service', args: 1, required: false, argName: "Hive_Service", "Hive Repo ranger.rest.v2.Service name to apply changes")
         cli.dfss(longOpt: 'hdfs.service', args: 1, required: false, argName: "HDFS_Service", "HDFS Repo ranger.rest.v2.Service name to apply changes")
         cli.delete(longOpt: 'delete.policy', args: 2, valueSeparator: " ", required: false, argName: "Delete_Policy_Range", "Delete Policy Range")
+
         options = cli.parse(args)
 
         if (!options)
